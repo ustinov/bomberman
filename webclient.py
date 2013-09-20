@@ -40,3 +40,7 @@ class WebClient(WebSocketApp):
         self._server = server
         self._user = user
         self.run_forever()
+
+
+if __name__ == '__main__':
+    raise RuntimeError("This module is not designed to be ran from CLI.")

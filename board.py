@@ -35,7 +35,7 @@ class Board:
 
     def is_my_bomberman_dead(self):
         """ Returns False if your bomberman still alive."""
-        return Element('DEAD_BOMBERMAN').getChar() in self._string
+        return Element('DEAD_BOMBERMAN').get_char() in self._string
 
     def get_bomberman(self):
         """ Return the point where your bombermain is."""
@@ -90,15 +90,53 @@ class Board:
         return self._find_all(Element('BOOM'))
 
     def get_future_blasts(self):
-        return self._f
+        _bombs = set()
+        _bombs.update(self.get_bombs())
+        _bombs.update(self._find_all(Element('OTHER_BOMB_BOMBERMAN')))
+        _points = set()
+        for _bomb in _bombs:
+            _bx, _by = _bomb.get_x(), _bomb.get_y()
+            _points.update(_bomb)
+            _points.update([Point(x, y) for x, y in ((_bx + 1, _by),
+                                                     (_bx - 1, _by),
+                                                     (_bx, _by + 1),
+                                                     (_bx, _by - 1))])
+        return ([_pt for _pt in _points if not (_pt.is_bad(self._size) or
+                                                _pt in self.get_walls())])
         
     def is_near(self, x, y, elem):
-        pass
+        _is_near = False
+        if not Point(x, y).is_bad(self._size):
+            _is_near = (self.is_at(x + 1, y, elem) or
+                        self.is_at(x - 1, y, elem) or
+                        self.is_at(x, 1 + y, elem) or
+                        self.is_at(x, 1 - y, elem))
+        return _is_near
 
     def count_near(self, x, y, elem):
-        pass
+        """ Counts the number of occurencies of elem nearby """
+        _near_count = 0
+        if not Point(x, y).is_bad(self._size):
+            for _x, _y in ((x + 1, y), (x - 1, y), (x, 1 + y), (x, 1 - y)):
+                if self.is_at(_x, _y, elem):
+                    _near_count += 1
+        return _near_count
 
     def to_string(self):
+        return ("Board:\n{brd}\nBomberman at: {mbm}\nOther Bombermans "
+                "at: {obm}\nMeat Choppers at: {mcp}\nDestroy Walls at:"
+                " {dwl}\nBombs at: {bmb}\nBlasts at: {bls}\nExpected "
+                "Blasts at: {ebl}".format(brd=self._line_by_line(),
+                                          mbm=self.get_bomberman(),
+                                          obm=self.get_other_bombermans(),
+                                          mcp=self.get_meat_choppers(),
+                                          dwl=self.get_destroy_walls(),
+                                          bmb=self.get_bombs(),
+                                          bls=self.get_blasts(),
+                                          ebl=self.get_future_blasts())
+        )
+
+    def _line_by_line(self):
         return '\n'.join([self._string[i:i + self._size]
                               for i in range(0, self._len, self._size)])
 
@@ -110,3 +148,7 @@ class Board:
 
     def _xy2strpos(self, x, y):
         return self._size * y + x
+
+
+if __name__ == '__main__':
+    raise RuntimeError("This module is not designed to be ran from CLI")

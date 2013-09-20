@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 
+from time import time
 from random import choice
 from board import Board
+from element import Element
 from direction import Direction
 
 class DirectionSolver:
+    """ This class should contain the movement generation algorythm."""
     
     def __init__(self):
-        
         self._direction = None
-        self._bomb = None
         self._board = None
         self._last = None
         self._count = 0
@@ -23,14 +24,23 @@ class DirectionSolver:
 
     def find_direction(self):
         """ This is an example of direction solver subroutine."""
-        _direction = Direction('NULL')
+        _direction = Direction('NULL').to_string()
+        if self._board.is_my_bomberman_dead():
+            print("Bomberman is dead. Sending 'NULL' command...")
+            return _direction
         # here's how we find the current Point of our bomberman
         _bm = self._board.get_bomberman()
+        _bm_x, _bm_y = _bm.get_x(), _bm.get_y()
+        # Let's check whether our bomberman is not surrounded by walls
+        if 4 == self._board.count_near(_bm_x, _bm_y, Element('DESTROY_WALL')):
+            print("It seems like walls surround you. Self-destroying.")
+            return Direction('ACT').to_string()  # Let's drop a bomb then
+        #print(self._board.to_string())
         print("Found your Bomberman at {}".format(_bm))
-        #
         # here's how we get the list of barriers Points
         _barriers = self._board.get_barriers()
-        while True:
+        _deadline = time() + 30
+        while time() < _deadline:
             # here we get the random direction choise
             __dir = Direction(choice(('LEFT', 'RIGHT', 'DOWN', 'UP')))
             # now we calculate the coordinates of potential point to go
@@ -46,6 +56,9 @@ class DirectionSolver:
                     self._last = _bm.get_x(), _bm.get_y()
                     self._count = 0
                     break
+        else: # it seem that we are surrounded
+            print("It's long time passed. Let's drop a bomb")
+            _direction = Direction('ACT').to_string() # let's drop a bomb  :)
         return _direction
         
 if __name__ == '__main__':

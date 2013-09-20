@@ -37,6 +37,7 @@ def value_of(char):
     else:
         raise ArgumentError("No such Element: {}".format(char))
 
+
 class Element:
     """ Class describes the Element objects for Bomberman game."""
     def __init__(self, n_or_c):

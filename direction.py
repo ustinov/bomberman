@@ -60,3 +60,6 @@ class Direction:
             _inv_dir = Direction('STOP')
         return _inv_dir
 
+
+if __name__ == '__main__':
+    raise RuntimeError("This module is not designed to be ran from CLI")

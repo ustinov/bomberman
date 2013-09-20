@@ -12,6 +12,9 @@ class Point:
     def __str__(self):
         return self.to_string()
 
+    def __repr__(self):
+        return self.to_string()
+
     def __eq__(self, other_point):
         return self.__key() == other_point.__key()
 
@@ -25,11 +28,11 @@ class Point:
         return self._y
 
     def is_bad(self, board_size):
-        return (x > board_size or x < 0 or y > board_size or y < 0)
+        return (self._x > board_size or self._x < 0 or
+                self._y > board_size or self._y < 0)
 
     def to_string(self):
         return "[{},{}]".format(self._x, self._y)
-
 
 
 if __name__ == '__main__':
