@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
 from webclient import WebClient
+from dds import DirectionSolver
 
 def main():
-    dds = None
+    dds = DirectionSolver()
     wcl = WebClient(dds)
     try:
-        wcl.run("ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws",
-                'lishmael')
+        wcl.run("ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws", 'au')
     except Exception as e:
         raise
 
