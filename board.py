@@ -3,6 +3,7 @@
 from math import sqrt
 from point import Point
 from element import Element
+from direction import Direction
 
 class Board:
     """ Class describes the Board field for Bomberman game."""
@@ -100,12 +101,17 @@ class Board:
         for _bomb in _bombs:
             _bx, _by = _bomb.get_x(), _bomb.get_y()
             _points.add(_bomb)
-            _points.update([Point(x, y) for x, y in ((_bx + 3, _by),
-                                                     (_bx - 3, _by),
-                                                     (_bx, _by + 3),
-                                                     (_bx, _by - 3))])
-        return ([_pt for _pt in _points if not (_pt.is_bad(self._size) or
-                                                _pt in self.get_walls())])
+            for _d in ('LEFT', 'RIGHT', 'DOWN', 'UP'):
+                __dir = Direction(_d)
+                __x, __y = _bx, _by
+                for _ in range(3):
+                    __x, __y = __dir.change_x(__x), __dir.change_y(__y)
+                    __pt = Point(__x, __y)
+                    if not (__pt.is_bad(self._size) or
+                            __pt in self.get_walls()):
+                        break
+                    _points.add(__pt)
+        return list(_points)
 
     def is_near(self, x, y, elem):
         _is_near = False
