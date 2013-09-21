@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 
+from sys import argv
 from sys import version_info
 from webclient import WebClient
 from dds import DirectionSolver
 
-def main():
+_SERVER = "ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws"
+
+def main(username):
 
     assert version_info[0] == 3, "You should run me with Python 3.x"
 
     dds = DirectionSolver()
     wcl = WebClient(dds)
 
-    wcl.run("ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws", 'au')
+    wcl.run(_SERVER, username)
 
 if __name__ == '__main__':
-    main()
+    assert argv[1], "You should have to pass the username as a parameter."
+    main(argv[1])
