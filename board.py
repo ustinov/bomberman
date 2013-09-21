@@ -33,6 +33,9 @@ class Board:
         """ Return true if barrier is at x,y."""
         return Point(x, y) in self.get_barriers()
 
+    def is_future_blast_at(self, x, y):
+        return Point(x, y) in self.get_future_blasts()
+
     def is_my_bomberman_dead(self):
         """ Returns False if your bomberman still alive."""
         return Element('DEAD_BOMBERMAN').get_char() in self._string
@@ -96,14 +99,14 @@ class Board:
         _points = set()
         for _bomb in _bombs:
             _bx, _by = _bomb.get_x(), _bomb.get_y()
-            _points.update(_bomb)
-            _points.update([Point(x, y) for x, y in ((_bx + 1, _by),
-                                                     (_bx - 1, _by),
-                                                     (_bx, _by + 1),
-                                                     (_bx, _by - 1))])
+            _points.add(_bomb)
+            _points.update([Point(x, y) for x, y in ((_bx + 3, _by),
+                                                     (_bx - 3, _by),
+                                                     (_bx, _by + 3),
+                                                     (_bx, _by - 3))])
         return ([_pt for _pt in _points if not (_pt.is_bad(self._size) or
                                                 _pt in self.get_walls())])
-        
+
     def is_near(self, x, y, elem):
         _is_near = False
         if not Point(x, y).is_bad(self._size):

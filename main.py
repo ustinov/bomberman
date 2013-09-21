@@ -5,7 +5,7 @@ from sys import version_info
 from webclient import WebClient
 from dds import DirectionSolver
 
-_SERVER = "ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws"
+_SERVER = "ws://172.22.108.60:8080/codenjoy-contest/ws"
 
 def main(username):
 

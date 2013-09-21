@@ -46,7 +46,8 @@ class DirectionSolver:
             # now we calculate the coordinates of potential point to go
             _x, _y = __dir.change_x(_bm.get_x()), __dir.change_y(_bm.get_y())
             # if there's no barrier at random point
-            if not self._board.is_barrier_at(_x, _y):
+            if not (self._board.is_barrier_at(_x, _y) or
+                    self._board.is_future_blast_at(_x, _y)):
                 # here we count the attempt to choose the way
                 self._count += 1
                 # and check whether it's not the one we just came from
